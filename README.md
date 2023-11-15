@@ -43,8 +43,7 @@ $ for file in *.gz; do tar xfz $file; done
    * Review the MARC enrichment fields and subfields if your publishing profile did not use the same values
 
 ```bash
-$ cd ~/Documents/programming/ruby
-$ git clone <repo-url>
+$ git clone https://github.com/UW-Madison-Library/alma-scsb-ingest-transfrorm.git
 $ cd alma-scsb-ingest-transform
 $ bundle install
 $ cp transform.yml.example transform.yml
