@@ -2,68 +2,28 @@
 :institution_code: INSTITUTION_CODE
 :bib_metadata:
   :field: "950"
-  :suppressed_status_sf: a
-  :create_date_sf: b
-  :update_date_sf: c
 :holding_metadata:
   :field: "952"
-  :create_date_sf: a
-  :update_date_sf: d
-  :suppressed_sf: e
 :locations:
   :field: "852"
   :subfields:
-    - 8
     - b
-    - c
     - h
-    - i
-    - k
-    - z
 :summary_statements:
   :field: "866"
   :subfields:
     - a
-    - z
 :supplementary_materials:
   :field: "867"
-  :subfields:
-    - a
-    - z
 :indexes:
   :field: "868"
-  :subfields:
-    - a
-    - z
 :action_notes:
   :field: "583"
-  :subfields:
-    - a
-    - b
-    - c
-    - d
-    - e
-    - f
-    - h
-    - i
-    - j
-    - k
-    - l
-    - n
-    - o
-    - u
-    - z
-    - 3
-    - 5
 :item_enrichment:
   :field: "876"
   :pid_sf: a
+  :status_sf: j
+  :library: k
   :barcode_sf: p
   :copy_id_sf: t
-  :status_sf: j
   :description_sf: 3
-  :process_type_sf: x
-  :create_date_sf: d
-  :holdings_id_sf: 0
-  :commitment_sf: r
-  :retention_reason_sf: s

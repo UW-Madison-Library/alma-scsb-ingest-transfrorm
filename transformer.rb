@@ -31,14 +31,14 @@ class Transformer
                   marc.record do
                     marc.datafield(tag: "852", ind1: location.indicator1, ind2: location.indicator2) do
                       @configuration[:locations][:subfields].each do |sf_code|
-                        marc.subfield(location[sf_code], code: sf_code) if location[sf_code]
+                        marc.subfield(location[sf_code] ? location[sf_code] : "", code: sf_code)
                       end
                     end # bibRecord/holdings/holding/content/collection/record/datafield[tag="852"]
 
                     holding_statements.each do |stmt|
                       marc.datafield(tag: "866", ind1: stmt.indicator1, ind2: stmt.indicator2) do
                         @configuration[:summary_statements][:subfields].each do |sf_code|
-                          marc.subfield(stmt[sf_code], code: sf_code) if stmt[sf_code]
+                          marc.subfield(stmt[sf_code] ? stmt[sf_code] : "", code: sf_code)
                         end
                       end # holding_statements.each
                     end # bibRecord/holdings/holding/content/collection/record/datafield[tag="866"]
@@ -52,16 +52,20 @@ class Transformer
                   items.collection(xmlns: "http://www.loc.gov/MARC21/slim") do |marc|
                     holding_items.each do |item|
                       marc.record do
-                        marc.datafield(tag: "876", ind1: location.indicator1, ind2: location.indicator2) do
-                          marc.subfield(item[@configuration[:item_enrichment][:pid_sf]], code: "a") if item[@configuration[:item_enrichment][:pid_sf]]
-                          marc.subfield(item[@configuration[:item_enrichment][:barcode_sf]], code: "p") if item[@configuration[:item_enrichment][:barcode_sf]]
-                          marc.subfield(item[@configuration[:item_enrichment][:copy_id_sf]], code: "t") if item[@configuration[:item_enrichment][:copy_id_sf]]
-                          marc.subfield(item[@configuration[:item_enrichment][:status_sf]], code: "j") if item[@configuration[:item_enrichment][:status_sf]]
-                          marc.subfield(item[@configuration[:item_enrichment][:description_sf]], code: "3") if item[@configuration[:item_enrichment][:description_sf]]
-                          marc.subfield(item[@configuration[:item_enrichment][:process_type_sf]], code: "x") if item[@configuration[:item_enrichment][:process_type_sf]]
-                          marc.subfield(item[@configuration[:item_enrichment][:create_date_sf]], code: "d") if item[@configuration[:item_enrichment][:create_date_sf]]
-                          marc.subfield(item[@configuration[:item_enrichment][:commitment_sf]], code: "r") if item[@configuration[:item_enrichment][:commitment_sf]]
-                          marc.subfield(item[@configuration[:item_enrichment][:retention_reason_sf]], code: "s") if item[@configuration[:item_enrichment][:retention_reason_sf]]
+                        marc.datafield(tag: "876", ind1: " ", ind2: " ") do
+                          item_config = @configuration[:item_enrichment]
+
+                          # Required fields: must include and use a blank value
+                          marc.subfield(item[item_config[:pid_sf]] ? item[item_config[:pid_sf]] : "", code: "a")
+                          # Use Restrictions: Field must be present. Defaulting to blank value, which implies no restrictions
+                          marc.subfield("", code: "h")
+                          marc.subfield(item[item_config[:status_sf]] ? item[item_config[:status_sf]] : "", code: "j")
+                          marc.subfield(location["b"], code: "k")
+                          marc.subfield(item[item_config[:barcode_sf]] ? item[item_config[:barcode_sf]] : "", code: "p")
+                          marc.subfield("IMS_LOCATION_CODE", code: "l")
+                          # Optional fields: do not require a blank value
+                          marc.subfield(item[item_config[:copy_id_sf]], code: "t") if item[item_config[:copy_id_sf]]
+                          marc.subfield(item[item_config[:description_sf]], code: "3") if item[item_config[:description_sf]]
                         end # bibRecord/holdings/holding/content/items/content/collection/record/datafield[tag="876"]
                       end # bibRecord/holdings/holding/content/items/content/collection/record
                     end # holding_items.each
