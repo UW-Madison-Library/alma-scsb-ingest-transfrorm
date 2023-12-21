@@ -12,6 +12,12 @@ puts "Started"
 puts
 
 
+if ARGV.size > 0
+  args = ARGV.map {|argument| argument.split("=")}.to_h
+  record_limit = args["--record-limit"].to_i
+end
+
+
 configuration = YAML.load(File.read( Pathname.new(__FILE__).expand_path.dirname.join("transform.yml") ))
 data_dir      = Pathname.new(configuration[:data_directory])
 input_files   = data_dir.join("alma-published-data").glob("*.xml")
@@ -35,10 +41,12 @@ input_files.sort.each do |input_filepath|
     MARC::XMLReader.new(input_filepath.to_s, parser: "nokogiri", ignore_namespace: true).each do |record|
       record_count += 1
       bib_records.add_child( transformer.to_ingest_document(record).at("bibRecord") )
+      break if record_limit && record_count >= record_limit
     end
 
     output_file.write(document.to_xml)
   end
+  break if record_limit && record_count >= record_limit
 end
 puts "Record Count: #{record_count}"
 

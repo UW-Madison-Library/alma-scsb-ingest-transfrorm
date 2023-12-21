@@ -65,7 +65,7 @@ class Transformer
                           marc.subfield(location["b"], code: "k")
                           marc.subfield(item[item_config[:barcode_sf]] ? item[item_config[:barcode_sf]] : "", code: "p")
                           # TODO: what are the BTAA values for this code?
-                          marc.subfield("IMS_LOCATION_CODE", code: "l")
+                          marc.subfield("BTAA", code: "l")
 
                           # Optional fields: do not require a blank value
                           marc.subfield(item[item_config[:copy_id_sf]], code: "t")     if item[item_config[:copy_id_sf]]
@@ -77,7 +77,7 @@ class Transformer
                           # for the Collection Group Designation (CGD)
                           marc.subfield("Shared", code: "a")
                           # TODO: what are the BTAA values for this code?
-                          marc.subfield("CUSTOMER_CODE", code: "b")
+                          marc.subfield(@configuration[:institution_code], code: "b")
                         end # bibRecord/holdings/holding/content/items/content/collection/record/datafield[tag="900"]
                       end # bibRecord/holdings/holding/content/items/content/collection/record
                     end # holding_items.each
